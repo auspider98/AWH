@@ -2883,10 +2883,18 @@ function buildLocationsList() {
         </div>
       </div>`).join('');
     const title = loc.name || ('Location #' + (li+1));
-    return `<div class="panel open location-panel" data-loc-idx="${li}" style="margin-bottom:8px;">
-      <div class="panel-header" onclick="togglePanel(this)">
-        <div class="panel-title"><span class="panel-title-icon">📍</span> <span class="location-label">${escHtml(title)}</span></div>
-        <div style="display:flex;align-items:center;gap:10px;">
+    const isFirst = li === 0;
+    const isLast  = li === locs.length - 1;
+    return `<div class="panel open location-panel" data-loc-idx="${li}" draggable="false" style="margin-bottom:8px;">
+      <div class="panel-header" onclick="togglePanel(this)" style="cursor:pointer;">
+        <div class="panel-title" style="display:flex;align-items:center;gap:8px;">
+          <span class="location-drag-handle" title="Drag to reorder" style="cursor:grab;font-size:14px;color:var(--muted);padding:2px 4px;flex-shrink:0;" onclick="event.stopPropagation()">⠿</span>
+          <span class="panel-title-icon">📍</span>
+          <span class="location-label">${escHtml(title)}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <button class="cp-move-btn" onclick="moveLocation(${li},-1);event.stopPropagation();" title="Move up" ${isFirst?'disabled':''}>↑</button>
+          <button class="cp-move-btn" onclick="moveLocation(${li},1);event.stopPropagation();" title="Move down" ${isLast?'disabled':''}>↓</button>
           ${locs.length > 1 ? `<button class="btn-remove" onclick="removeLocation(${li});event.stopPropagation();">×</button>` : ''}
           <span class="panel-chevron">▼</span>
         </div>
@@ -2919,11 +2927,62 @@ function buildLocationsList() {
       </div>
     </div>`;
   }).join('');
+  initLocationsDragDrop();
 }
 
 function updateLocationLabel(input, li) {
   const panel = input.closest('.location-panel');
   if (panel) { const lbl = panel.querySelector('.location-label'); if (lbl) lbl.textContent = input.value || ('Location #' + (li+1)); }
+}
+
+function moveLocation(li, dir) {
+  collectData();
+  const locs = DATA.locations;
+  const newIdx = li + dir;
+  if (newIdx < 0 || newIdx >= locs.length) return;
+  [locs[li], locs[newIdx]] = [locs[newIdx], locs[li]];
+  buildLocationsList();
+  autosave();
+}
+
+function initLocationsDragDrop() {
+  const container = document.getElementById('locations-list');
+  if (!container) return;
+  let dragSrc = null;
+  container.querySelectorAll('.location-panel').forEach(panel => {
+    const handle = panel.querySelector('.location-drag-handle');
+    if (!handle) return;
+    panel.draggable = false;
+    handle.addEventListener('mousedown', () => { panel.draggable = true; });
+    handle.addEventListener('mouseup',   () => { panel.draggable = false; });
+    panel.addEventListener('dragstart', e => {
+      dragSrc = panel;
+      panel.style.opacity = '0.4';
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    panel.addEventListener('dragend', () => {
+      panel.draggable = false;
+      panel.style.opacity = '';
+      container.querySelectorAll('.location-panel').forEach(p => p.style.borderTop = '');
+    });
+    panel.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (!dragSrc || panel === dragSrc) return;
+      container.querySelectorAll('.location-panel').forEach(p => p.style.borderTop = '');
+      panel.style.borderTop = '2px solid var(--gold)';
+    });
+    panel.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragSrc || dragSrc === panel) return;
+      const fromIdx = parseInt(dragSrc.dataset.locIdx);
+      const toIdx   = parseInt(panel.dataset.locIdx);
+      collectData();
+      const moved = DATA.locations.splice(fromIdx, 1)[0];
+      DATA.locations.splice(toIdx, 0, moved);
+      buildLocationsList();
+      autosave();
+    });
+  });
 }
 
 function addLocation() {

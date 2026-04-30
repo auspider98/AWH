@@ -134,16 +134,29 @@ const SITE_CONFIG = {
       "btnLinkUrl": ""
     }
   ],
-  "phone": "(423) 910-0896",
-  "phoneRaw": "14239100896",
+  "phone": "(706) 861-4508",
+  "phoneRaw": "17068614508",
   "fax": "",
   "email": "contact@awhealth.com",
-  "address": "6845 Mountain View Rd.",
-  "city": "Ooltewah",
-  "state": "Tennessee",
-  "stateAbbr": "TN",
-  "zip": "37363",
+  "address": "93 Robin Rd.",
+  "city": "Ringgold",
+  "state": "Georgia",
+  "stateAbbr": "GA",
+  "zip": "30736",
   "locations": [
+    {
+      "name": "Ringgold Office",
+      "phone": "(706) 861-4508",
+      "phoneRaw": "17068614508",
+      "fax": "",
+      "email": "contact@awhealth.com",
+      "address": "93 Robin Rd.",
+      "city": "Ringgold",
+      "state": "Georgia",
+      "stateAbbr": "GA",
+      "zip": "30736",
+      "hours": []
+    },
     {
       "name": "Ooltewah Office",
       "phone": "(423) 910-0896",
@@ -169,35 +182,9 @@ const SITE_CONFIG = {
           "hours": ""
         }
       ]
-    },
-    {
-      "name": "Ringgold Office",
-      "phone": "(706) 861-4508",
-      "phoneRaw": "17068614508",
-      "fax": "",
-      "email": "contact@awhealth.com",
-      "address": "93 Robin Rd.",
-      "city": "Ringgold",
-      "state": "Georgia",
-      "stateAbbr": "GA",
-      "zip": "30736",
-      "hours": []
     }
   ],
-  "hours": [
-    {
-      "days": "Monday - Thursday",
-      "hours": "8.30 -4.00"
-    },
-    {
-      "days": "Friday",
-      "hours": "8.30 - 12.00"
-    },
-    {
-      "days": "Closed Weekends",
-      "hours": ""
-    }
-  ],
+  "hours": [],
   "socialLinks": [],
   "stats": [],
   "colors": {
@@ -456,5 +443,5 @@ const SITE_CONFIG = {
     "home": "public",
     "about": "public"
   },
-  "_savedAt": 1777587558552
+  "_savedAt": 1777588069400
 };
