@@ -844,6 +844,11 @@ html, body { height: 100%; font-family: 'DM Sans', system-ui, sans-serif; backgr
           <span class="panel-chevron">▼</span>
         </div>
         <div class="panel-body">
+          <div class="field-group">
+            <label>Google Maps API Key</label>
+            <input type="text" id="f_mapsApiKey" placeholder="AIza…"/>
+            <div class="field-hint">Used by Location sections for interactive map embeds. <a href="https://console.cloud.google.com" target="_blank" style="color:var(--gold);">Get a key →</a> Enable the Maps Embed API. Leave blank to use link-out mode instead.</div>
+          </div>
           <div class="form-row-2">
             <div class="field-group">
               <label>Business Name</label>
@@ -1819,6 +1824,7 @@ function applyAdminColors() {
    LOAD DATA INTO FORM
    ============================================= */
 function loadForm() {
+  setVal('f_mapsApiKey', DATA.mapsApiKey || '');
   setVal('f_firmName', DATA.firmName);
   setVal('f_tagline', DATA.tagline);
   setVal('f_footerBio', DATA.footerBio||'');
@@ -2296,6 +2302,7 @@ function persistToLocalStorage() {
 }
 
 function collectData() {
+  DATA.mapsApiKey = getVal('f_mapsApiKey');
   DATA.firmName = getVal('f_firmName');
   DATA.tagline = getVal('f_tagline');
   DATA.footerBio = getVal('f_footerBio');
@@ -3915,6 +3922,7 @@ const CP_SECTION_TYPES = [
   { value:'gallery',      label:'🖼️ Image Gallery' },
   { value:'pricing',      label:'🏆 Tier Cards' },
   { value:'flip-cards',  label:'🃏 Flip Cards' },
+  { value:'locations',   label:'📍 Locations' },
   { value:'link',         label:'🔗 Link' },
   { value:'button',       label:'🔘 Button' },
   { value:'richtext',     label:'✍️ Rich Text Block' },
@@ -3994,6 +4002,7 @@ function addHomeSection() {
   if (type === 'video') { defaults.videoLayout = 'contained'; defaults.videoPosition = 'left'; defaults.embedUrl = ''; defaults.mp4Url = ''; }
   if (type === 'gallery') { defaults.items = []; defaults.galleryCols = 3; }
   if (type === 'pricing') { defaults.items = []; }
+  if (type === 'locations') { defaults.items = []; defaults.displayMode = 'cards'; defaults.layoutMode = 'top'; defaults.mapMode = 'linkout'; defaults.maxCols = 2; defaults.showHours = true; }
   if (!Array.isArray(DATA.homeSections)) DATA.homeSections = [];
   DATA.homeSections.push(defaults);
   buildHomeSectionsList();
@@ -4060,6 +4069,7 @@ function addAboutSection() {
   if (type === 'video') { defaults.videoLayout = 'contained'; defaults.videoPosition = 'left'; defaults.embedUrl = ''; defaults.mp4Url = ''; }
   if (type === 'gallery') { defaults.items = []; defaults.galleryCols = 3; }
   if (type === 'pricing') { defaults.items = []; }
+  if (type === 'locations') { defaults.items = []; defaults.displayMode = 'cards'; defaults.layoutMode = 'top'; defaults.mapMode = 'linkout'; defaults.maxCols = 2; defaults.showHours = true; }
   if (!Array.isArray(DATA.aboutSections)) DATA.aboutSections = [];
   DATA.aboutSections.push(defaults);
   buildAboutSectionsList();
@@ -4146,6 +4156,7 @@ function collectHomeSingleSection_forPi(secCard, pi, si, existing) {
     testimonials: ['name','initials','stars','text','meta'],
     resources: ['tag','title','excerpt','date','readTime','featured','emoji','imagePath','linkType','linkUrl','ctaLabel'],
     team: ['name','title','photo','bio'],
+    locations: ['locationIndex','imagePath'],
   };
   if (arrTypes[type]) {
     sec.items = Array.from(secCard.querySelectorAll('.cp-sub-item')).map(item => {
@@ -4277,6 +4288,16 @@ function collectHomeSingleSection_forPi(secCard, pi, si, existing) {
         linkUrl:   visibleLinkUrl?.value.trim() || '',
       };
     });
+  }
+
+  // Locations
+  if (type === 'locations') {
+    sec.displayMode  = get('displayMode')  || 'cards';
+    sec.layoutMode   = get('layoutMode')   || 'top';
+    sec.featureSide  = get('featureSide')  || 'left';
+    sec.mapMode      = get('mapMode')      || 'linkout';
+    sec.maxCols      = parseInt(get('maxCols')) || 2;
+    sec.showHours    = secCard.querySelector('[data-field="showHours"]')?.checked !== false;
   }
 
   // Jurisdiction
@@ -6158,6 +6179,103 @@ function buildCpSectionTypeFields(sec, pi, si) {
         </div>`;
     }
 
+    case 'locations': {
+      const dispMode   = sec.displayMode  || 'cards';
+      const layoutMode = sec.layoutMode   || 'top';
+      const featureSide = sec.featureSide || 'left';
+      const mapMode    = sec.mapMode      || 'linkout';
+      const maxCols    = sec.maxCols      || 2;
+      const showHours  = sec.showHours !== false;
+      const items      = sec.items || [];
+      const piArg      = typeof pi === 'string' ? "'" + pi + "'" : pi;
+      const itemsHtml  = items.map((item, ii) => {
+        const selLoc = parseInt(item.locationIndex) || 0;
+        const locOptsForItem = (DATA.locations || []).map((loc, li) =>
+          '<option value="' + li + '"' + (li === selLoc ? ' selected' : '') + '>' + escHtml(loc.name || ('Location ' + (li+1))) + '</option>'
+        ).join('');
+        return '<div class="cp-sub-item" data-sub-idx="' + ii + '" style="margin-bottom:12px;">' +
+          '<div class="cp-sub-item-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">' +
+            '<span class="cp-sub-item-label">Location ' + (ii+1) + '</span>' +
+            '<div style="display:flex;gap:4px;">' +
+              '<button class="cp-move-btn" onclick="moveCpSubItem(' + piArg + ',' + si + ',\'items\',' + ii + ',-1);event.stopPropagation();" title="Move up">&#8593;</button>' +
+              '<button class="cp-move-btn" onclick="moveCpSubItem(' + piArg + ',' + si + ',\'items\',' + ii + ',1);event.stopPropagation();" title="Move down">&#8595;</button>' +
+              '<button class="btn-remove" onclick="removeCpSubItem(' + piArg + ',' + si + ',\'items\',' + ii + ');event.stopPropagation();">&#215;</button>' +
+            '</div>' +
+          '</div>' +
+          '<div style="padding:12px 0 4px;">' +
+            '<div class="field-group" style="margin-bottom:10px;"><label>Location</label>' +
+              '<select data-cp="' + pi + '" data-sec="' + si + '" data-arr="items" data-idx="' + ii + '" data-field="locationIndex">' + locOptsForItem + '</select>' +
+            '</div>' +
+            '<div class="field-group" style="margin-bottom:0;"><label>Image Path (optional)</label>' +
+              '<input type="text" data-cp="' + pi + '" data-sec="' + si + '" data-arr="items" data-idx="' + ii + '" data-field="imagePath" value="' + escHtml(item.imagePath||'') + '" placeholder="images/office.jpg"/>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      const selCards   = dispMode === 'cards'       ? ' selected' : '';
+      const selFeature = dispMode === 'feature'      ? ' selected' : '';
+      const selInter   = mapMode === 'interactive'   ? ' selected' : '';
+      const selLinkout = mapMode === 'linkout'       ? ' selected' : '';
+      const selNone    = mapMode === 'none'          ? ' selected' : '';
+      const selTop     = layoutMode === 'top'        ? ' selected' : '';
+      const selSide    = layoutMode === 'side'       ? ' selected' : '';
+      const selFLeft   = featureSide === 'left'      ? ' selected' : '';
+      const selFRight  = featureSide === 'right'     ? ' selected' : '';
+      const selCol2    = maxCols === 2 ? ' selected' : '';
+      const selCol3    = maxCols === 3 ? ' selected' : '';
+      return `
+        <div class="form-row-2" style="margin-bottom:12px;">
+          <div class="field-group" style="margin:0;">
+            <label>Display Mode</label>
+            <select ${p} data-field="displayMode">
+              <option value="cards"${selCards}>Cards</option>
+              <option value="feature"${selFeature}>Feature (cardless)</option>
+            </select>
+          </div>
+          <div class="field-group" style="margin:0;">
+            <label>Map Mode</label>
+            <select ${p} data-field="mapMode">
+              <option value="interactive"${selInter}>Interactive (API key required)</option>
+              <option value="linkout"${selLinkout}>Link-out button</option>
+              <option value="none"${selNone}>No map</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-2" style="margin-bottom:12px;">
+          <div class="field-group" style="margin:0;">
+            <label>Card Layout <span style="font-weight:400;font-size:11px;">(cards mode)</span></label>
+            <select ${p} data-field="layoutMode">
+              <option value="top"${selTop}>Image on top</option>
+              <option value="side"${selSide}>Image on side</option>
+            </select>
+          </div>
+          <div class="field-group" style="margin:0;">
+            <label>Max Columns <span style="font-weight:400;font-size:11px;">(cards mode)</span></label>
+            <select ${p} data-field="maxCols">
+              <option value="2"${selCol2}>2 columns</option>
+              <option value="3"${selCol3}>3 columns</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-2" style="margin-bottom:12px;">
+          <div class="field-group" style="margin:0;">
+            <label>Media Side <span style="font-weight:400;font-size:11px;">(feature mode)</span></label>
+            <select ${p} data-field="featureSide">
+              <option value="left"${selFLeft}>Image &amp; map on left</option>
+              <option value="right"${selFRight}>Image &amp; map on right</option>
+            </select>
+          </div>
+          <div class="field-group" style="margin:0;">
+            <div class="switch-row" style="margin:0;padding-top:22px;">
+              <span class="switch-label">Show hours on card</span>
+              <label class="switch"><input type="checkbox" ${p} data-field="showHours" ${showHours ? 'checked' : ''}/><span class="switch-slider"></span></label>
+            </div>
+          </div>
+        </div>
+        <div id="loc-items-${pi}-${si}">${itemsHtml}</div>
+        <button class="btn-add" onclick="addLocItem(${piArg},${si})">+ Add Location</button>`;
+    }
+
     default:
       return `<p class="field-hint">No editor for section type: ${sec.type}</p>`;
   }
@@ -6536,6 +6654,7 @@ function addCpSection(pi) {
   if (type === 'video') { defaults.videoLayout = 'contained'; defaults.videoPosition = 'left'; defaults.embedUrl = ''; defaults.mp4Url = ''; }
   if (type === 'gallery') { defaults.items = []; defaults.galleryCols = 3; }
   if (type === 'pricing') { defaults.items = []; }
+  if (type === 'locations') { defaults.items = []; defaults.displayMode = 'cards'; defaults.layoutMode = 'top'; defaults.mapMode = 'linkout'; defaults.maxCols = 2; defaults.showHours = true; }
   if (!DATA.customPages[pi]) return;
   DATA.customPages[pi].sections = DATA.customPages[pi].sections || [];
   DATA.customPages[pi].sections.push(defaults);
@@ -6552,6 +6671,17 @@ function addCpSection(pi) {
   }
   autosave();
   toast('Section added.','success');
+}
+
+function addLocItem(pi, si) {
+  collectData();
+  const secs = cpSections(pi);
+  if (!secs?.[si]) return;
+  const sec = secs[si];
+  if (!sec.items) sec.items = [];
+  sec.items.push({ locationIndex: 0, imagePath: '' });
+  rebuildAfterMutation(pi);
+  autosave();
 }
 
 // Resolve pi to the correct sections array ('h' = homeSections, 'a' = aboutSections, number = customPages[pi].sections)
@@ -6734,11 +6864,13 @@ function confirmSectionImport() {
     return;
   }
   sec.anchorId = '';
-  const destSecs = cpSections(_importTargetPi);
+  const targetPi = _importTargetPi;
+  collectData();
+  const destSecs = cpSections(targetPi);
   if (!destSecs) { errEl.textContent = 'Could not find destination page.'; errEl.style.display = ''; return; }
   destSecs.push(sec);
   closeSectionImport();
-  rebuildAfterMutation(_importTargetPi);
+  rebuildAfterMutation(targetPi);
   autosave();
   toast('Section imported successfully');
 }
@@ -7319,6 +7451,15 @@ function collectCpSections(card, pi, existingSections) {
         sec.mqText = get('mqText');
         sec.mqSeparator = get('mqSeparator') || '·';
         sec.items = collectCpSubItems(secCard, pi, si, ['imagePath','alt','linkUrl']); break;
+      case 'locations':
+        sec.displayMode  = get('displayMode')  || 'cards';
+        sec.layoutMode   = get('layoutMode')   || 'top';
+        sec.featureSide  = get('featureSide')  || 'left';
+        sec.mapMode      = get('mapMode')      || 'linkout';
+        sec.maxCols      = parseInt(get('maxCols')) || 2;
+        sec.showHours    = secCard.querySelector('[data-field="showHours"]')?.checked !== false;
+        sec.items        = collectCpSubItems(secCard, pi, si, ['locationIndex','imagePath']);
+        break;
       case 'link':
         sec.linkType = get('linkType'); sec.linkLabel = get('linkLabel');
         sec.linkUrl = collectCpSmartLinkUrl(secCard, pi, renderedSi, '', sec.linkType);
