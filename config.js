@@ -470,7 +470,7 @@ const SITE_CONFIG = {
               "imageSize": "full"
             },
             {
-              "icon": "⚖️",
+              "icon": "👶",
               "title": "Obstetrics",
               "desc": "Our practice cares for a woman’s unique needs in a warm, courteous and professional environment. Our dedication to excellence in care during pregnancy, labor and delivery, and postpartum means we will keep you surrounded by the best medical team available in the area. During your pregnancy, we will closely monitor your progress to ensure the best possible quality of care, striving for a healthy baby and mother.",
               "detail": "We provide a large selection of prenatal services – from routine care for the healthy mother to the most sophisticated care for the complicated pregnancy. Our clinical team works together with specialists in maternal fetal medicine to provide care for our patients with high-risk problems in pregnancy. These specialists can manage the most complicated pregnancies and perform CVS, amniocentesis, percutaneous umbilical cord sampling, Level II Ultrasound, and Doppler Flow studies.",
@@ -482,7 +482,7 @@ const SITE_CONFIG = {
               "imageSize": "full"
             },
             {
-              "icon": "⚖️",
+              "icon": "🩺",
               "title": "Surgeries",
               "desc": "Our physicians offer a full spectrum of female health procedures and surgeries.  We will discuss your surgical treatment plan with you and come up with the best solution for you.",
               "detail": "Some procedures are offered in the office while others will be performed at Parkridge East Hospital or Physicians Surgery Center.  Our administrative staff will help you navigate your insurance benefits to ensure no unexpected bills. We accept all major commercial health insurances, Medicare, and Medicaid. Affordable payment plans available.",
@@ -491,6 +491,18 @@ const SITE_CONFIG = {
               "btnLinkUrl": "surgery",
               "btnAnchorId": "",
               "imagePath": "images/surgery-01.png",
+              "imageSize": "full"
+            },
+            {
+              "icon": "🏵️",
+              "title": "Aesthetics",
+              "desc": "Here at Aesthetic Therapy we focus on creating an environment that is relaxing and catered to your needs.",
+              "detail": "Treatments include Facial Treatments, Dermaplaning Treatment, Hydrofacial Treatment, Spray Tans, Body treatments,\nVaginal Rejuvenation, Botox Injections, and Microneedling. Treatment Packages are available.",
+              "btnLabel": "Visit Aesthetics",
+              "btnLinkType": "external",
+              "btnLinkUrl": "https://auspider98.github.io/aesthetics/",
+              "btnAnchorId": "",
+              "imagePath": "images/aesthetics-01.png",
               "imageSize": "full"
             }
           ]
@@ -1035,6 +1047,6 @@ const SITE_CONFIG = {
     "cp-5": "public",
     "cp-6": "public"
   },
-  "_savedAt": 1777659035546,
+  "_savedAt": 1777664891432,
   "mapsApiKey": ""
 };
