@@ -7141,6 +7141,27 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight')  lightboxNav(1);
 });
 
+// Touch swipe support for lightbox
+let _lbTouchStartX = 0;
+let _lbTouchStartY = 0;
+(function() {
+  const lb = document.getElementById('cpsLightbox');
+  if (!lb) return;
+  lb.addEventListener('touchstart', e => {
+    _lbTouchStartX = e.touches[0].clientX;
+    _lbTouchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (!lb.classList.contains('open')) return;
+    const dx = e.changedTouches[0].clientX - _lbTouchStartX;
+    const dy = e.changedTouches[0].clientY - _lbTouchStartY;
+    // Only trigger if horizontal swipe dominates and exceeds threshold
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      lightboxNav(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+})();
+
 function closeServiceModal() {
   const m = document.getElementById('serviceModal');
   if (m) m.classList.remove('open');
