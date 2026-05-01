@@ -171,17 +171,43 @@ const SITE_CONFIG = {
       "hours": [
         {
           "days": "Monday - Thursday",
-          "hours": "8.30 -4.00"
+          "hours": "8.40 -4.00"
         },
         {
           "days": "Friday",
-          "hours": "8.30 - 12.00"
+          "hours": "8.40 - 12.00"
         },
         {
           "days": "Closed Weekends",
           "hours": ""
         }
       ]
+    },
+    {
+      "name": "Parkridge East Hospital",
+      "phone": "(423) 698-6061",
+      "phoneRaw": "14236986061",
+      "fax": "",
+      "email": "",
+      "address": "941 Spring Creek Road",
+      "city": "East Ridge",
+      "state": "Tennessee",
+      "stateAbbr": "TN",
+      "zip": "37404",
+      "hours": []
+    },
+    {
+      "name": "PHYSICIANS Surgery Center",
+      "phone": "(423) 988-1600",
+      "phoneRaw": "14239881600",
+      "fax": "",
+      "email": "",
+      "address": "924 Spring Creek Road",
+      "city": "East Ridge",
+      "state": "Tennessee",
+      "stateAbbr": "TN",
+      "zip": "37404",
+      "hours": []
     }
   ],
   "hours": [],
@@ -191,7 +217,7 @@ const SITE_CONFIG = {
     "navy": "#403749",
     "navyLight": "#403749",
     "gold": "#c358e9",
-    "goldLight": "#43225d",
+    "goldLight": "#c358e9",
     "goldPale": "#faf6ec",
     "warmWhite": "#fffdf9",
     "cream": "#f9f6f0",
@@ -272,6 +298,7 @@ const SITE_CONFIG = {
   "heroSubline": "Associates in Women’s Health is an OB/GYN practice striving to provide the highest level of quality women’s healthcare to our patients. We do this by making our patients and their health our #1 priority. Our providers have extensive education, training, and experience to provide the very best medical care for women of all ages.  We are committed to providing quality women’s healthcare with individualized treatment plans for every patient.  ",
   "heroTrustBullets": [
     "2 Locations Serving GA & TN",
+    "Accept All Major Heath Insurances, Medicare, & Medicaid",
     "30+ Years of Experience"
   ],
   "heroPrimaryLabel": "Contact Us",
@@ -352,6 +379,68 @@ const SITE_CONFIG = {
   },
   "customPages": [
     {
+      "slug": "locations",
+      "navLabel": "Locations",
+      "emoji": "📄",
+      "enabled": true,
+      "parent": null,
+      "hiddenFromNav": false,
+      "sections": [
+        {
+          "type": "text",
+          "label": "Near You",
+          "background": "light",
+          "anchorId": "text",
+          "heading": "Our Locations",
+          "body": "We offer two convenient office locations, one in Ringgold GA, and the other in the Ooltewah TN. We deliver our newborns at Park Ridge East in TN, located near the 1-24/I-75 split."
+        },
+        {
+          "type": "locations",
+          "label": "Office Locations",
+          "background": "alt",
+          "anchorId": "office-locations",
+          "displayMode": "cards",
+          "layoutMode": "top",
+          "featureSide": "right",
+          "mapMode": "linkout",
+          "maxCols": 2,
+          "showHours": true,
+          "items": [
+            {
+              "locationIndex": "0",
+              "imagePath": "staff/office-ringgold-01.png"
+            },
+            {
+              "locationIndex": "1",
+              "imagePath": "staff/office-ooltewah-01.png"
+            }
+          ]
+        },
+        {
+          "type": "locations",
+          "label": "Hospital / Surgical Locations",
+          "background": "dark",
+          "anchorId": "other-locations",
+          "displayMode": "feature",
+          "layoutMode": "top",
+          "featureSide": "left",
+          "mapMode": "linkout",
+          "maxCols": 2,
+          "showHours": false,
+          "items": [
+            {
+              "locationIndex": "2",
+              "imagePath": "staff/office-parkridge east.png"
+            },
+            {
+              "locationIndex": "3",
+              "imagePath": "staff/office-physicians center.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "services",
       "navLabel": "Services",
       "emoji": "👩‍⚕️",
@@ -377,8 +466,32 @@ const SITE_CONFIG = {
               "btnLinkType": "internal",
               "btnLinkUrl": "gynecology",
               "btnAnchorId": "",
-              "imagePath": "",
-              "imageSize": "thumb"
+              "imagePath": "images/GYNECOLOGY.webp",
+              "imageSize": "full"
+            },
+            {
+              "icon": "⚖️",
+              "title": "Obstetrics",
+              "desc": "Our practice cares for a woman’s unique needs in a warm, courteous and professional environment. Our dedication to excellence in care during pregnancy, labor and delivery, and postpartum means we will keep you surrounded by the best medical team available in the area. During your pregnancy, we will closely monitor your progress to ensure the best possible quality of care, striving for a healthy baby and mother.",
+              "detail": "We provide a large selection of prenatal services – from routine care for the healthy mother to the most sophisticated care for the complicated pregnancy. Our clinical team works together with specialists in maternal fetal medicine to provide care for our patients with high-risk problems in pregnancy. These specialists can manage the most complicated pregnancies and perform CVS, amniocentesis, percutaneous umbilical cord sampling, Level II Ultrasound, and Doppler Flow studies.",
+              "btnLabel": "Obstetrical Services",
+              "btnLinkType": "internal",
+              "btnLinkUrl": "obstetrics",
+              "btnAnchorId": "",
+              "imagePath": "images/obstetrics-01.png",
+              "imageSize": "full"
+            },
+            {
+              "icon": "⚖️",
+              "title": "Surgeries",
+              "desc": "Our physicians offer a full spectrum of female health procedures and surgeries.  We will discuss your surgical treatment plan with you and come up with the best solution for you.",
+              "detail": "Some procedures are offered in the office while others will be performed at Parkridge East Hospital or Physicians Surgery Center.  Our administrative staff will help you navigate your insurance benefits to ensure no unexpected bills. We accept all major commercial health insurances, Medicare, and Medicaid. Affordable payment plans available.",
+              "btnLabel": "Surgical Services",
+              "btnLinkType": "internal",
+              "btnLinkUrl": "surgery",
+              "btnAnchorId": "",
+              "imagePath": "images/surgery-01.png",
+              "imageSize": "full"
             }
           ]
         },
@@ -521,6 +634,159 @@ const SITE_CONFIG = {
       ]
     },
     {
+      "slug": "obstetrics",
+      "navLabel": "Obstetrics",
+      "emoji": "📄",
+      "enabled": true,
+      "parent": "services",
+      "hiddenFromNav": false,
+      "sections": [
+        {
+          "type": "two-col",
+          "label": "Service",
+          "background": "alt",
+          "anchorId": "obstetrics",
+          "heading": "Obstetrics",
+          "body": "Our practice cares for a woman’s unique needs in a warm, courteous and professional environment. Our dedication to excellence in care during pregnancy, labor and delivery, and postpartum means we will keep you surrounded by the best medical team available in the area. During your pregnancy, we will closely monitor your progress to ensure the best possible quality of care, striving for a healthy baby and mother.\n\nWe provide a large selection of prenatal services – from routine care for the healthy mother to the most sophisticated care for the complicated pregnancy. Our clinical team works together with specialists in maternal fetal medicine to provide care for our patients with high-risk problems in pregnancy. These specialists can manage the most complicated pregnancies and perform CVS, amniocentesis, percutaneous umbilical cord sampling, Level II Ultrasound, and Doppler Flow studies.",
+          "imagePath": "images/obstetrics-01.png",
+          "imagePosition": "right",
+          "imageMaxWidth": "",
+          "cta_linkType": "none",
+          "cta_linkUrl": "home",
+          "cta_linkLabel": ""
+        },
+        {
+          "type": "two-col",
+          "label": "",
+          "background": "light",
+          "anchorId": "obstetrical-care",
+          "heading": "Obstetrical Care",
+          "body": "Preconception counseling and testing\n\nPrenatal care\n\nLow risk and high risk Pregnancy\n\nMidwifery services\n\nIn-office Ultrasound\n\nIn-office fetal non-stress testing\n\nIn-office Fetal biophysical profile testing\n\nMultiple gestation pregnancies\n\nOB Ultrasound Services\n\nEarly Ob ultrasound\n\n18 – 20 wk Ob ultrasound for fetal assessment\n\n3D/4D Ultrasound\n\nLab work done on premises",
+          "imagePath": "images/obstetrics-02.png",
+          "imagePosition": "left",
+          "imageMaxWidth": "",
+          "cta_linkType": "none",
+          "cta_linkUrl": "home",
+          "cta_linkLabel": ""
+        },
+        {
+          "type": "two-col",
+          "label": "",
+          "background": "light",
+          "anchorId": "two-col",
+          "heading": "",
+          "body": "Gestational Hypertension\n\nGestational Diabetes\n\nAdvanced maternal age\n\nPreterm labor\n\nPremature rupture of membranes\n\nHistory of incompetent cervix\n\nMaternal medical problems\n\nChronic hypertension\n\nRespiratory disease (PE, Asthma, etc.)\n\nGI disease (Crohns, Celiac, etc.)\n\nHematologic (Sickle Cell, cardiolipin Ab, etc.)\n\nPre-existing diabetes\n\nMale infant circumcision",
+          "imagePath": "images/obstetrics-03.png",
+          "imagePosition": "right",
+          "imageMaxWidth": "",
+          "cta_linkType": "none",
+          "cta_linkUrl": "forms",
+          "cta_linkLabel": ""
+        },
+        {
+          "type": "button",
+          "label": "",
+          "background": "light",
+          "anchorId": "button",
+          "primary_linkType": "none",
+          "primary_linkLabel": "",
+          "primary_linkUrl": "",
+          "primary_anchorId": "",
+          "secondary_linkType": "internal",
+          "secondary_linkLabel": "Want More Information?",
+          "secondary_linkUrl": "forms",
+          "secondary_anchorId": "services"
+        }
+      ]
+    },
+    {
+      "slug": "surgery",
+      "navLabel": "Surgery",
+      "emoji": "📄",
+      "enabled": true,
+      "parent": "services",
+      "hiddenFromNav": false,
+      "sections": [
+        {
+          "type": "two-col",
+          "label": "Service",
+          "background": "light",
+          "anchorId": "two-col",
+          "heading": "Surgical Services",
+          "body": "Our physicians offer a full spectrum of female health procedures and surgeries.  We will discuss your surgical treatment plan with you and come up with the best solution for you. Some procedures are offered in the office while others will be performed at Parkridge East Hospital or Physicians Surgery Center.  Our administrative staff will help you navigate your insurance benefits to ensure no unexpected bills. We accept all major commercial health insurances, Medicare, and Medicaid. Affordable payment plans available.",
+          "imagePath": "images/surgery-01.png",
+          "imagePosition": "right",
+          "imageMaxWidth": "",
+          "cta_linkType": "none",
+          "cta_linkUrl": "home",
+          "cta_linkLabel": ""
+        },
+        {
+          "type": "richtext",
+          "label": "",
+          "background": "light",
+          "anchorId": "richtext",
+          "richContent": "<h3>Laparoscopic And Laser Surgery</h3><p>Laparoscopy&nbsp;is the most common procedure used to diagnose and remove endometriosis. Instead of using a large abdominal incision, the surgeon inserts a lighted viewing instrument called a laparoscope through a small incision.&nbsp;</p><h3>In-Office Ablation</h3><p>NovaSure®&nbsp;is a quick, safe, and simple procedure to lighten or stop your periods, without the side effects of hormones or the risks of hysterectomy.&nbsp;</p><h3>In-Office Hysteroscopy</h3><p>Hysteroscopy is the process of viewing and operating in the endometrial cavity from a transcervical approach.</p><!--EndFragment-->\n\n",
+          "imagePath": "",
+          "imagePos": "none",
+          "imageSize": "md",
+          "imageCaption": "",
+          "fullWidth": false
+        },
+        {
+          "type": "button",
+          "label": "",
+          "background": "light",
+          "anchorId": "button",
+          "primary_linkType": "none",
+          "primary_linkLabel": "",
+          "primary_linkUrl": "",
+          "primary_anchorId": "",
+          "secondary_linkType": "internal",
+          "secondary_linkLabel": "Want More Information?",
+          "secondary_linkUrl": "forms",
+          "secondary_anchorId": "services"
+        }
+      ]
+    },
+    {
+      "slug": "patients",
+      "navLabel": "Patients",
+      "emoji": "📄",
+      "enabled": true,
+      "parent": null,
+      "hiddenFromNav": false,
+      "sections": [
+        {
+          "type": "bullets",
+          "label": "Visit Preparation",
+          "background": "dark",
+          "anchorId": "patient-information",
+          "heading": "Patient Information",
+          "subtitle": "",
+          "fullWidth": false,
+          "items": [
+            {
+              "icon": "✓",
+              "title": "Patient Portal",
+              "desc": "Update forms, message your provider, see test results and more are available on our patient portal. New patients can create a account and fill out forms before your first visit.",
+              "linkType": "external",
+              "linkUrl": "home",
+              "anchorId": ""
+            },
+            {
+              "icon": "✓",
+              "title": "Office Locations",
+              "desc": "",
+              "linkType": "internal",
+              "linkUrl": "home",
+              "anchorId": "locations"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "forms",
       "navLabel": "Forms",
       "emoji": "📄",
@@ -530,7 +796,7 @@ const SITE_CONFIG = {
       "sections": [
         {
           "type": "form",
-          "label": "AWH Forms",
+          "label": "Contact Form",
           "background": "alt",
           "anchorId": "services",
           "heading": "Services",
@@ -608,7 +874,66 @@ const SITE_CONFIG = {
       ]
     }
   ],
-  "aboutSections": [],
+  "aboutSections": [
+    {
+      "type": "gallery",
+      "label": "Office Staff",
+      "background": "alt",
+      "anchorId": "staff-ringgold",
+      "heading": "Ringgold Office Support Staff",
+      "subtitle": "",
+      "galleryCols": 3,
+      "items": [
+        {
+          "imagePath": "staff/ringgold-01.png",
+          "alt": "",
+          "title": "",
+          "caption": ""
+        },
+        {
+          "imagePath": "staff/ringgold-02.png",
+          "alt": "",
+          "title": "",
+          "caption": ""
+        },
+        {
+          "imagePath": "staff/ringgold-03.png",
+          "alt": "",
+          "title": "",
+          "caption": ""
+        }
+      ]
+    },
+    {
+      "type": "gallery",
+      "label": "",
+      "background": "light",
+      "anchorId": "staff-ooltewah",
+      "heading": "Ooltewah Office Support Staff",
+      "subtitle": "",
+      "galleryCols": 3,
+      "items": [
+        {
+          "imagePath": "staff/ooltewah-01.png",
+          "alt": "",
+          "title": "",
+          "caption": ""
+        },
+        {
+          "imagePath": "staff/ooltewah-02.png",
+          "alt": "",
+          "title": "",
+          "caption": ""
+        },
+        {
+          "imagePath": "staff/ooltewah-03.png",
+          "alt": "",
+          "title": "",
+          "caption": ""
+        }
+      ]
+    }
+  ],
   "homeSections": [
     {
       "type": "team",
@@ -633,30 +958,40 @@ const SITE_CONFIG = {
       "secondary_anchorId": ""
     },
     {
-      "type": "bullets",
-      "label": "",
+      "type": "locations",
+      "label": "Our Locations",
       "background": "alt",
-      "anchorId": "bullets",
-      "heading": "Our Locations",
-      "subtitle": "",
+      "anchorId": "locations",
       "items": [
         {
-          "icon": "GA",
-          "title": "Ringgold Office",
-          "desc": "93 Robin Rd.\nRinggold, GA",
-          "linkType": "none",
-          "linkUrl": "home",
-          "anchorId": ""
+          "locationIndex": "0",
+          "imagePath": "staff/office-ringgold-01.png"
         },
         {
-          "icon": "TN",
-          "title": "Ooltewah Office",
-          "desc": "",
-          "linkType": "none",
-          "linkUrl": "home",
-          "anchorId": ""
+          "locationIndex": "1",
+          "imagePath": "staff/office-ooltewah-01.png"
         }
-      ]
+      ],
+      "displayMode": "cards",
+      "layoutMode": "top",
+      "featureSide": "right",
+      "mapMode": "linkout",
+      "maxCols": 2,
+      "showHours": false
+    },
+    {
+      "type": "button",
+      "label": "",
+      "background": "light",
+      "anchorId": "button-2",
+      "primary_linkType": "internal",
+      "primary_linkLabel": "Contact Us",
+      "primary_linkUrl": "contact",
+      "primary_anchorId": "",
+      "secondary_linkType": "none",
+      "secondary_linkLabel": "",
+      "secondary_linkUrl": "home",
+      "secondary_anchorId": ""
     }
   ],
   "footerBio": "",
@@ -694,7 +1029,12 @@ const SITE_CONFIG = {
     "about": "public",
     "cp-0": "public",
     "cp-1": "public",
-    "cp-2": "public"
+    "cp-2": "public",
+    "cp-3": "public",
+    "cp-4": "public",
+    "cp-5": "public",
+    "cp-6": "public"
   },
-  "_savedAt": 1777614871216
+  "_savedAt": 1777659035546,
+  "mapsApiKey": ""
 };
