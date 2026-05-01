@@ -4580,9 +4580,16 @@ function buildContact() {
         input = `<div class="cps-form-radio-group">${opts}</div>`;
         break;
       }
-      case 'checkbox':
-        input = `<div class="cps-form-checkbox-wrap"><label><input type="checkbox" name="${escAttr(f.label)}" ${reqAttr}/>${f.label||''}</label></div>`;
+      case 'checkbox': {
+        const cxOpts = f.options && f.options.length ? f.options : null;
+        if (cxOpts) {
+          const cxItems = cxOpts.map(o => `<label><input type="checkbox" name="${escAttr(f.label)}" value="${escAttr(o)}"/>${o}</label>`).join('');
+          input = `<div class="cps-form-radio-group">${cxItems}</div>`;
+        } else {
+          input = `<div class="cps-form-checkbox-wrap"><label><input type="checkbox" name="${escAttr(f.label)}" ${reqAttr}/>${f.label||''}</label></div>`;
+        }
         break;
+      }
       default:
         input = `<input type="text" id="${fieldId}" name="${escAttr(f.label)}" ${ph} ${reqAttr}/>`;
     }
@@ -6431,10 +6438,18 @@ function renderCustomSection(sec, idx, isFirst, allSections) {
             input = `<div class="cps-form-radio-group">${opts}</div>`;
             break;
           }
-          case 'checkbox':
-            input = `<div class="cps-form-checkbox-wrap">
+          case 'checkbox': {
+            const cxOpts = f.options && f.options.length ? f.options : null;
+            if (cxOpts) {
+              const cxItems = cxOpts.map(o => `<label><input type="checkbox" name="${escAttr(f.label)}" value="${escAttr(o)}"/>${o}</label>`).join('');
+              input = `<div class="cps-form-radio-group">${cxItems}</div>`;
+            } else {
+              input = `<div class="cps-form-checkbox-wrap">
               <label><input type="checkbox" name="${escAttr(f.label)}" ${reqAttr}/>${f.label || ''}</label>
             </div>`;
+            }
+            break;
+          }
             break;
           default:
             input = `<input type="text" id="${fieldId}" name="${escAttr(f.label)}" ${ph} ${reqAttr}/>`;

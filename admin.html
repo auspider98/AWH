@@ -1989,13 +1989,12 @@ function loadForm() {
   updateAboutNavLabel({ value: DATA.aboutNavLabel || 'About Us' });
   updateFontPreview();
   loadToggles();
-  // Custom pages
+  // Custom pages must be initialised first so getInternalPageOptions works in home/about section builders
+  if (!Array.isArray(DATA.customPages)) DATA.customPages = [];
+  buildCustomPagesList();
   if (!Array.isArray(DATA.homeSections)) DATA.homeSections = [];
   buildHomeSectionsList();
   if (!Array.isArray(DATA.aboutSections)) DATA.aboutSections = [];
-  buildAboutSectionsList();
-  if (!Array.isArray(DATA.customPages)) DATA.customPages = [];
-  buildCustomPagesList();
   // Apply site color scheme to admin UI
   applyAdminColors();
 }
@@ -6220,7 +6219,7 @@ function buildFormFieldEditorHtml(f, pi, si, fi) {
   const fv = (key, def='') => escHtml(f[key] != null ? f[key] : def);
   const fieldTypes = ['text','email','phone','textarea','select','radio','checkbox'];
   const typeOpts = fieldTypes.map(t => `<option value="${t}"${f.type===t?' selected':''}>${t}</option>`).join('');
-  const showOptions = (f.type==='select'||f.type==='radio');
+  const showOptions = (f.type==='select'||f.type==='radio'||f.type==='checkbox');
   return `<div class="cp-sub-item cp-form-field-item" data-fi="${fi}" data-sub-idx="${fi}">
     <div class="cp-sub-item-header">
       <div style="display:flex;align-items:center;gap:6px;">
@@ -6314,7 +6313,7 @@ function onFormFieldTypeChange(pi, si, fi, selectEl) {
   if (!item) return;
   const optRow = item.querySelector('.cp-form-options-row');
   if (!optRow) return;
-  const showOptions = selectEl.value === 'select' || selectEl.value === 'radio';
+  const showOptions = selectEl.value === 'select' || selectEl.value === 'radio' || selectEl.value === 'checkbox';
   optRow.style.display = showOptions ? 'block' : 'none';
 }
 
