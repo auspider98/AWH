@@ -5092,22 +5092,20 @@ function collectHomeSingleSection_forPi(secCard, pi, si, existing) {
 
   // Link appendage
   if (type === 'link') {
-    sec.linkType = existing.linkType || 'none';
-    sec.linkUrl = existing.linkUrl || '';
     sec.linkLabel = get('linkLabel');
-    // Read smart link url from visible field
-    const urlEl = secCard.querySelector('[data-field="linkUrl"]');
-    if (urlEl) {
-      let node = urlEl;
-      let visible = true;
-      while (node && node !== secCard) {
-        if (getComputedStyle(node).display === 'none') { visible = false; break; }
-        node = node.parentElement;
-      }
-      if (visible) sec.linkUrl = urlEl.value.trim();
-    }
     const typeEl = secCard.querySelector('[data-field="linkType"]');
     if (typeEl) sec.linkType = typeEl.value;
+    // Find the visible linkUrl element (internal select vs external input)
+    const urlEls = Array.from(secCard.querySelectorAll('[data-field="linkUrl"]'));
+    const visibleUrl = urlEls.find(el => {
+      let node = el;
+      while (node && node !== secCard) {
+        if (getComputedStyle(node).display === 'none') return false;
+        node = node.parentElement;
+      }
+      return true;
+    });
+    sec.linkUrl = visibleUrl ? visibleUrl.value.trim() : '';
     const anchorEl = secCard.querySelector('[data-field="link_anchorId"]');
     if (anchorEl) sec.link_anchorId = anchorEl.value.trim();
   }
@@ -5119,15 +5117,17 @@ function collectHomeSingleSection_forPi(secCard, pi, si, existing) {
       if (typeEl) sec[pref + '_linkType'] = typeEl.value;
       const labelEl = secCard.querySelector('[data-field="' + pref + '_linkLabel"]');
       if (labelEl) sec[pref + '_linkLabel'] = labelEl.value.trim();
-      const urlEl = secCard.querySelector('[data-field="' + pref + '_linkUrl"]');
-      if (urlEl) {
-        let node = urlEl; let visible = true;
+      // Find the visible linkUrl element (internal select vs external input)
+      const urlEls = Array.from(secCard.querySelectorAll('[data-field="' + pref + '_linkUrl"]'));
+      const visibleUrl = urlEls.find(el => {
+        let node = el;
         while (node && node !== secCard) {
-          if (getComputedStyle(node).display === 'none') { visible = false; break; }
+          if (getComputedStyle(node).display === 'none') return false;
           node = node.parentElement;
         }
-        sec[pref + '_linkUrl'] = visible ? urlEl.value.trim() : (existing[pref + '_linkUrl'] || '');
-      }
+        return true;
+      });
+      sec[pref + '_linkUrl'] = visibleUrl ? visibleUrl.value.trim() : '';
       const anchorEl = secCard.querySelector('[data-field="' + pref + '_anchorId"]');
       if (anchorEl) sec[pref + '_anchorId'] = anchorEl.value.trim();
     });
